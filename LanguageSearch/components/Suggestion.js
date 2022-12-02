@@ -6,6 +6,7 @@ export default function Suggestion({ $target, initialState, onSelect }) {
   this.state = {
     selectedIndex: 0,
     items: initialState.items,
+    typedWords: "",
   };
 
   this.setState = (nextState) => {
@@ -13,8 +14,26 @@ export default function Suggestion({ $target, initialState, onSelect }) {
     this.render();
   };
 
+  this.renderMatchedItem = (keyword, item) => {
+    if (!item.includes(keyword)) {
+      return item;
+    }
+    // console.log(item);
+    // console.log("asdsad");
+    const matchedText = item.match(new RegExp(keyword, "gi"))[0];
+
+    return item.replace(
+      new RegExp(matchedText, "gi"),
+      `<span class="Suggestion__item--matched">${matchedText}</span>`
+    );
+  };
+
   this.render = () => {
-    const { items = [], selectedIndex } = this.state;
+    const { selectedIndex, typedWords, items } = this.state;
+    // console.log(selectedIndex, keyword, items);
+    // console.log(this.state);
+    // console.log(items);
+    console.log(this.state);
     if (items.length > 0) {
       this.$element.style.display = "block";
       this.$element.innerHTML = `
@@ -24,8 +43,11 @@ export default function Suggestion({ $target, initialState, onSelect }) {
             (item, index) => `
             <li class="${
               index === selectedIndex ? "Suggestion__item--selected" : ""
-            }" data-index="${index}">${item}</li>
-            </li>
+            }" data-index="${index}">${this.renderMatchedItem(
+              typedWords,
+              item
+            )}</li>
+     
         `
           )
           .join("")}
