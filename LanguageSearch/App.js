@@ -7,7 +7,6 @@ export default function App({ $target }) {
   this.state = {
     fetchedLanguages: [],
     selectedLanguages: [],
-    typedWords: "",
   };
 
   this.setState = (nextState) => {
@@ -18,8 +17,8 @@ export default function App({ $target }) {
     suggestion.setState({
       selectedIndex: 0,
       items: this.state.fetchedLanguages,
-      typedWords: this.state.typedWords,
     });
+    console.log(selectedLanguages);
     selectedLanguages.setState(this.state.selectedLanguages);
   };
 
@@ -35,15 +34,12 @@ export default function App({ $target }) {
       if (keyword.length === 0) {
         this.setState({
           fetchLanguages: [],
-          typedWords: keyword,
         });
       } else {
         const languages = await fetchLanguages(keyword);
         this.setState({
           fetchedLanguages: languages,
-          typedWords: keyword,
         });
-        // console.log("App.", this.state);
       }
     },
   });
@@ -53,7 +49,6 @@ export default function App({ $target }) {
     initialState: {
       cursor: 0,
       items: [],
-      typedWords: "",
     },
     onSelect: (language) => {
       alert(language);
